@@ -51,6 +51,32 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         }
         #endregion
 
+        #region [목록을 가져오기위한 반복 메소드 2]
+        public static List<Dictionary<string, object>> selectListTwo(OracleCommand command)
+        {
+            List<Dictionary<string, object>> resultList = new();
+
+            using (OracleDataReader dataReader = command.ExecuteReader())
+            {
+                if (dataReader.HasRows)
+                {
+                    while (dataReader.Read())
+                    {
+                        Dictionary<string, object> obj = new Dictionary<string, object>();
+
+                        for (int i = 0; i < dataReader.VisibleFieldCount; i++)
+                        {
+                            obj.Add(dataReader.GetName(i), dataReader.GetValue(i));
+                        }
+
+                        resultList.Add(obj);
+                    }
+                }
+                return resultList;
+            }
+        }
+        #endregion
+
         #region [상세 조회]
         public static MPosts selectDetail(OracleCommand command)
         {
@@ -162,6 +188,68 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
                         #region [에러 메시지 세팅]
                         response.Result_Code = "ERROR";
                         response.Result_Msg = ex.Message;
+
+                        if (LogUtil.ErrLogYn == true)
+                        {
+                            LogUtil.ErrLogParam("Post-GetPostList", request);
+                            LogUtil.ErrLogLine();
+                            LogUtil.ErrLogMsg(ex);
+                            LogUtil.ErrLogLine();
+                        }
+                        #endregion
+                    }
+                }
+            }
+            return response;
+        }
+        #endregion
+
+        #region [구현 - 포스트목록조회 2]
+        public static Dictionary<string, object> GetPostListTwo(Dictionary<string, object> request)
+        {
+            Dictionary<string, object> response = new Dictionary<string, object>();
+
+            using (OracleConnection connection = new OracleConnection(DataBaseConf.ConnectionStrings))
+            {
+                using (
+                    OracleCommand command = new OracleCommand
+                    {
+                        Connection = connection,
+                        CommandText = "PKG_POSTS.GetPostList",
+                        CommandType = CommandType.StoredProcedure
+                    })
+                {
+                    try
+                    {
+
+                        #region [입력 파라미터]
+                        command.Parameters.Add(new OracleParameter("in_limit", OracleDbType.Int32)).Value = Convert.ToInt32(request["limitCnt"].ToString());
+                        #endregion
+
+                        #region [리턴 파라미터]
+                        command.Parameters.Add(new OracleParameter("out_result_code", OracleDbType.Varchar2, DataLength.out_code)).Direction = ParameterDirection.Output;
+                        command.Parameters.Add(new OracleParameter("out_result_message", OracleDbType.Varchar2, DataLength.out_long_msg)).Direction = ParameterDirection.Output;
+                        command.Parameters.Add(new OracleParameter("out_result_data", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
+                        #endregion
+
+                        #region [디비 커넥션 연결] 
+                        connection.Open();
+                        #endregion
+
+                        #region [디비사용]
+                        response.Add("Data", selectListTwo(command));
+                        #endregion
+
+                        #region [결과값 세팅]
+                        response.Add("Result_Code", command.Parameters["out_result_code"].Value.ToString());
+                        response.Add("Result_Msg", command.Parameters["out_result_message"].Value.ToString());
+                        #endregion
+                    }
+                    catch (Exception ex)
+                    {
+                        #region [에러 메시지 세팅]
+                        response.Add("Result_Code", "ERROR");
+                        response.Add("Result_Msg", ex.Message);
 
                         if (LogUtil.ErrLogYn == true)
                         {

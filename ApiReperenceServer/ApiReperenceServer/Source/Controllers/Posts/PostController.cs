@@ -35,6 +35,17 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         }
         #endregion
 
+        #region [포스트 목록 조회 2]
+        [HttpPost(Name = "GetPostListTwo")]
+        public IEnumerable<Dictionary<string, object>> GetPostListTwo(Dictionary<string, object> request)
+        {
+
+            Dictionary<string, object> response = PostsImpl.GetPostListTwo(request);
+
+            yield return response;
+        }
+        #endregion
+
         #region [포스트 목록 상세]        
         [HttpPost(Name = "GetPostDetail")]
         public IEnumerable<ResponseGetPostDetail> GetPostDetail(RequestGetPostDetail request)
