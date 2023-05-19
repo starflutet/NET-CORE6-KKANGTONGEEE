@@ -3,15 +3,15 @@ namespace ApiReperenceServer.Source.Serialize
 {
     public class responsePOSTS
     {
-        #region [°á°úÄÚµå]
+        #region [ê²°ê³¼ì½”ë“œ]
         public string? Result_Code { get; set; }
         #endregion
 
-        #region [°á°ú¸Ş½ÃÁö]
+        #region [ê²°ê³¼ë©”ì‹œì§€]
         public string? Result_Msg { get; set; }
         #endregion               
 
-        #region [Æ÷½ºÆ® µ¥ÀÌÅÍ]
+        #region [í¬ìŠ¤íŠ¸ ë°ì´í„°]
         public List<Posts> Data { get; set; }
         #endregion        
 

@@ -1,4 +1,4 @@
-﻿using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
 using System;
 
 namespace ApiReperenceServer.Source.App
@@ -7,7 +7,7 @@ namespace ApiReperenceServer.Source.App
     {
         public class DataBaseConf
         {
-            #region [호스트]
+            #region [호스트] 
             private const string Host = "localhost";
             #endregion
 

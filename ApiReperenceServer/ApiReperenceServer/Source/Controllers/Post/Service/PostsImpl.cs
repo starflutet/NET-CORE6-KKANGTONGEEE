@@ -1,10 +1,8 @@
 using ApiReperenceServer.Source.DSerialize;
 using ApiReperenceServer.Source.Models;
 using ApiReperenceServer.Source.Serialize;
-using Microsoft.AspNetCore.Mvc;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
-using System.Data.Common;
 using System.Reflection;
 using static ApiReperenceServer.Source.App.Constants;
 
@@ -12,12 +10,10 @@ namespace ApiReperenceServer.Source.Controllers.Post.Service
 {
     public class PostsImpl
     {
-        #region [±¸Çö - Æ÷½ºÆ®¸ñ·ÏÁ¶È¸]
+        #region [êµ¬í˜„ - í¬ìŠ¤íŠ¸ëª©ë¡ì¡°íšŒ]
         public static responsePOSTS GetPostList(requestPOSTS request)
         {
             responsePOSTS response = new responsePOSTS();
-
-            OracleConnection _conn = new OracleConnection(DataBaseConf.ConnectionStrings);
 
             using (OracleConnection connection = new OracleConnection(DataBaseConf.ConnectionStrings))
             {
@@ -31,46 +27,36 @@ namespace ApiReperenceServer.Source.Controllers.Post.Service
                 {
                     try
                     {
-                        #region [¸®½ºÆ® ÃÊ±âÈ­]
+                        #region [ë¦¬ìŠ¤íŠ¸ ì´ˆê¸°í™”]
                         List<Posts> postsList = new List<Posts>();
                         #endregion
 
-                        #region [ÀÔ·Â ÆÄ¶ó¹ÌÅÍ]
+                        #region [ì…ë ¥ íŒŒë¼ë¯¸í„°]
                         command.Parameters.Add(new OracleParameter("in_limit", OracleDbType.Int32)).Value = request.LimitCnt;
                         #endregion
 
-                        #region [¸®ÅÏ ÆÄ¶ó¹ÌÅÍ]
+                        #region [ë¦¬í„´ íŒŒë¼ë¯¸í„°]
                         command.Parameters.Add(new OracleParameter("out_result_code", OracleDbType.Varchar2, DataLength.out_code)).Direction = ParameterDirection.Output;
                         command.Parameters.Add(new OracleParameter("out_result_message", OracleDbType.Varchar2, DataLength.out_long_msg)).Direction = ParameterDirection.Output;
                         command.Parameters.Add(new OracleParameter("out_result_data", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
                         #endregion
 
-                        #region [µğºñ Ä¿³Ø¼Ç ¿¬°á] 
+                        #region [ë””ë¹„ ì»¤ë„¥ì…˜ ì—°ê²°] 
                         connection.Open();
                         #endregion
 
-                        #region [µğºñ»ç¿ë]
-                        using (OracleDataReader dataReader = command.ExecuteReader())
-                        {
-                            if (dataReader.HasRows)
-                            {
-                                while (dataReader.Read())
-                                {
-                                    postsList.Add(selectList(dataReader));
-                                }
-                            }
-                        }
+                        #region [ë””ë¹„ì‚¬ìš©]
+                        response.Data = selectList(command);
                         #endregion
 
-                        #region [°á°ú°ª ¼¼ÆÃ]
-                        response.Data = postsList;
+                        #region [ê²°ê³¼ê°’ ì„¸íŒ…]
                         response.Result_Code = command.Parameters["out_result_code"].Value.ToString();
                         response.Result_Msg = command.Parameters["out_result_message"].Value.ToString();
                         #endregion
                     }
                     catch (Exception ex)
                     {
-                        #region [¿¡·¯ ¸Ş½ÃÁö ¼¼ÆÃ]
+                        #region [ì—ëŸ¬ ë©”ì‹œì§€ ì„¸íŒ…]
                         response.Result_Code = "ERROR";
                         response.Result_Msg = ex.Message;
 
@@ -87,36 +73,50 @@ namespace ApiReperenceServer.Source.Controllers.Post.Service
             }
             return response;
         }
-        #endregion
+        #endregion 
 
-        #region [¸ñ·ÏÀ» °¡Á®¿À±âÀ§ÇÑ ¹İº¹ ¸Ş¼Òµå]
-        public static Posts selectList(OracleDataReader dataReader)
+        #region [ëª©ë¡ì„ ê°€ì ¸ì˜¤ê¸°ìœ„í•œ ë°˜ë³µ ë©”ì†Œë“œ]
+        public static List<Posts> selectList(OracleCommand command)
         {
-            Posts obj = new Posts();
-            #region [°´Ã¼ÀÇ ÇÁ·ÎÆÛÆ¼ ¸í °¡Á®¿À±â]
-            Type postsType = typeof(Posts);
-            PropertyInfo[] properties = postsType.GetProperties();
-            #endregion
+            List<Posts> resultList = new();
 
-            #region [ÇÁ·Î¸ÓÆ¼ ¸íÀ¸·Î ¹İº¹½ÇÇà]
-            foreach (PropertyInfo property in properties)
+            using (OracleDataReader dataReader = command.ExecuteReader())
             {
-                string propertyName = property.Name.ToLower().Replace("_", "");
-                for (int i = 0; i < dataReader.VisibleFieldCount; i++)
+                if (dataReader.HasRows)
                 {
-                    string dataColName = dataReader.GetName(i).ToLower().Replace("_", "");
-                    if (propertyName.Equals(dataColName))
+                    while (dataReader.Read())
                     {
-                        obj = setPostObj(propertyName, obj, dataReader.GetValue(i));
+                        Posts obj = new Posts();
+
+                        #region [ê°ì²´ì˜ í”„ë¡œí¼í‹° ëª… ê°€ì ¸ì˜¤ê¸°]
+                        Type postsType = typeof(Posts);
+                        PropertyInfo[] properties = postsType.GetProperties();
+                        #endregion
+
+                        #region [í”„ë¡œë¨¸í‹° ëª…ìœ¼ë¡œ ë°˜ë³µì‹¤í–‰]
+                        foreach (PropertyInfo property in properties)
+                        {
+                            string propertyName = property.Name.ToLower().Replace("_", "");
+                            for (int i = 0; i < dataReader.VisibleFieldCount; i++)
+                            {
+                                string dataColName = dataReader.GetName(i).ToLower().Replace("_", "");
+                                if (propertyName.Equals(dataColName))
+                                {
+                                    obj = setPostObj(propertyName, obj, dataReader.GetValue(i));
+                                }
+                            }
+                        }
+                        #endregion
+                        resultList.Add(obj);
                     }
                 }
+                return resultList;
             }
-            #endregion
-            return obj;
+
         }
         #endregion
 
-        #region [Posts-ÇÁ·ÎÆÛÆ¼ ¼¼ÆÃ ¸Ş¼Òµå]
+        #region [Posts-í”„ë¡œí¼í‹° ì„¸íŒ… ë©”ì†Œë“œ]
         public static Posts setPostObj(string propertiesName, Posts obj, object value)
         {
             switch (propertiesName)

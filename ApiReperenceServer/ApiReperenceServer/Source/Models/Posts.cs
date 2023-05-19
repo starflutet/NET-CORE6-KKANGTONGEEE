@@ -4,23 +4,23 @@ namespace ApiReperenceServer.Source.Models
 {
     public class Posts
     {
-        #region [¾ÆÀÌµğ]
+        #region [ì•„ì´ë””]
         public int Id { get; set; }
         #endregion
 
-        #region [Á¦¸ñ]
+        #region [ì œëª©]
         public string Title { get; set; }
         #endregion
 
-        #region [³»¿ë]
+        #region [ë‚´ìš©]
         public string Content { get; set; }
         #endregion
 
-        #region [ÀÛ¼ºÀÏ½Ã]
+        #region [ì‘ì„±ì¼ì‹œ]
         public DateTime CreatedAt { get; set; }
         #endregion
 
-        #region [ÀÛ¼ºÀÚ Á¦¸ñ]
+        #region [ì‘ì„±ì ì œëª©]
         public string Author { get; set; }
         #endregion
 

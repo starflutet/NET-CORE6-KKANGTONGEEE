@@ -2,8 +2,8 @@ namespace ApiReperenceServer.Source.DSerialize
 {
     public class requestPOSTS
     {
-        #region [¸ñ·Ï °³¼öÁ¦ÇÑ]
+        #region [ëª©ë¡ ê°œìˆ˜ì œí•œ]
         public int LimitCnt { get; set; }
-        #endregion
+        #endregion 
     }
 }
