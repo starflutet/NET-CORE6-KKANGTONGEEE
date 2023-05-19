@@ -1,8 +1,8 @@
 using Oracle.ManagedDataAccess.Client;
 
-namespace ApiReperenceServer.Source.Models
+namespace ApiReperenceServer.Source.Models.Posts
 {
-    public class Posts
+    public class MPosts
     {
         #region [아이디]
         public int Id { get; set; }

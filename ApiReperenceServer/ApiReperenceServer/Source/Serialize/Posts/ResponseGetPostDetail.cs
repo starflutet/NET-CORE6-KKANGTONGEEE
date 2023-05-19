@@ -1,7 +1,9 @@
 using ApiReperenceServer.Source.Models;
+using ApiReperenceServer.Source.Models.Posts;
+
 namespace ApiReperenceServer.Source.Serialize
 {
-    public class responsePOSTS
+    public class ResponseGetPostDetail
     {
         #region [결과코드]
         public string? Result_Code { get; set; }
@@ -12,7 +14,7 @@ namespace ApiReperenceServer.Source.Serialize
         #endregion               
 
         #region [포스트 데이터]
-        public List<Posts> Data { get; set; }
+        public MPosts Data { get; set; }
         #endregion        
 
     }
