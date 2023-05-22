@@ -102,5 +102,15 @@ namespace ApiReperenceServer.Source.Controllers.Posts
             yield return response;
         }
         #endregion
+
+        #region [포스트 등록]        
+        [HttpPost(Name = "AddPost")]
+        public IEnumerable<ResponseAction> AddPost(RequestAddPost request)
+        {
+            ResponseAction response = PostsImpl.AddPost(request);
+
+            yield return response;
+        }
+        #endregion
     }
 }
