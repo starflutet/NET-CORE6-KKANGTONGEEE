@@ -221,7 +221,8 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
                     try
                     {
                         #region [리스트 초기화]
-                        List<MPosts> postsList = new List<MPosts>();
+                        List<Dictionary<string, object>> exeDb = new();
+                        List<MGetPostList> mPostsList = new();
                         #endregion
 
                         #region [입력 파라미터]
@@ -239,8 +240,6 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
                         #endregion
 
                         #region [디비사용]
-                        List<Dictionary<string, object>> exeDb = new();
-                        List<MGetPostList> mPostsList = new();
                         exeDb = selectListTwo(command);
 
                         #region [객체의 프로퍼티 명 가져오기]
