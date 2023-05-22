@@ -1,8 +1,8 @@
-using Oracle.ManagedDataAccess.Client;
+using ApiReperenceServer.Source.Models.Posts;
 
 namespace ApiReperenceServer.Source.Models.Posts
 {
-    public class MPosts
+    public class MGetPostList
     {
         #region [아이디]
         public int Id { get; set; }
@@ -10,11 +10,7 @@ namespace ApiReperenceServer.Source.Models.Posts
 
         #region [제목]
         public string? Title { get; set; }
-        #endregion
-
-        #region [내용]
-        public string? Content { get; set; }
-        #endregion
+        #endregion   
 
         #region [작성일시]
         public DateTime CreatedAt { get; set; }
@@ -23,7 +19,5 @@ namespace ApiReperenceServer.Source.Models.Posts
         #region [작성자 제목]
         public string? Author { get; set; }
         #endregion
-
-
     }
 }
