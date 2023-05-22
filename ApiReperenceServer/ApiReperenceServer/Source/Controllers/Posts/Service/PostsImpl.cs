@@ -1,3 +1,4 @@
+using ApiReperenceServer.Source.App;
 using ApiReperenceServer.Source.DSerialize;
 using ApiReperenceServer.Source.Models.Posts;
 using ApiReperenceServer.Source.Serialize.Posts;
@@ -56,24 +57,22 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         {
             List<Dictionary<string, object>> resultList = new();
 
-            using (OracleDataReader dataReader = command.ExecuteReader())
+            using OracleDataReader dataReader = command.ExecuteReader();
+            if (dataReader.HasRows)
             {
-                if (dataReader.HasRows)
+                while (dataReader.Read())
                 {
-                    while (dataReader.Read())
+                    Dictionary<string, object> obj = new();
+
+                    for (int i = 0; i < dataReader.VisibleFieldCount; i++)
                     {
-                        Dictionary<string, object> obj = new Dictionary<string, object>();
-
-                        for (int i = 0; i < dataReader.VisibleFieldCount; i++)
-                        {
-                            obj.Add(dataReader.GetName(i), dataReader.GetValue(i));
-                        }
-
-                        resultList.Add(obj);
+                        obj.Add(dataReader.GetName(i), dataReader.GetValue(i));
                     }
+
+                    resultList.Add(obj);
                 }
-                return resultList;
             }
+            return resultList;
         }
         #endregion       
 
@@ -207,12 +206,12 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         #region [구현 - 포스트목록조회4]
         public static ResponseGetPostList GetPostListFore(RequestGetPostList request)
         {
-            ResponseGetPostList response = new ResponseGetPostList();
+            ResponseGetPostList response = new();
 
-            using (OracleConnection connection = new OracleConnection(DataBaseConf.ConnectionStrings))
+            using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
             {
                 using (
-                    OracleCommand command = new OracleCommand
+                    OracleCommand command = new()
                     {
                         Connection = connection,
                         CommandText = "PKG_POSTS.GetPostList",
@@ -240,8 +239,8 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
                         #endregion
 
                         #region [디비사용]
-                        List<Dictionary<string, object>> exeDb = new List<Dictionary<string, object>>();
-                        List<MGetPostList> mPostsList = new List<MGetPostList>();
+                        List<Dictionary<string, object>> exeDb = new();
+                        List<MGetPostList> mPostsList = new();
                         exeDb = selectListTwo(command);
 
                         #region [객체의 프로퍼티 명 가져오기]
@@ -251,7 +250,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
 
                         foreach (Dictionary<string, object> dictionary in exeDb)
                         {
-                            MGetPostList obj = new MGetPostList();
+                            MGetPostList obj = new();
                             foreach (KeyValuePair<string, object> kvp in dictionary)
                             {
                                 foreach (PropertyInfo property in properties)
@@ -270,7 +269,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
                                                 obj.Title = Convert.ToString(value);
                                                 break;
                                             case "createdat":
-                                                obj.CreatedAt = Convert.ToDateTime(value);
+                                                obj.CreatedAt = MyUtils.ConvertYYYYMMDDHHmmss(Convert.ToDateTime(value));
                                                 break;
                                             case "author":
                                                 obj.Author = Convert.ToString(value);

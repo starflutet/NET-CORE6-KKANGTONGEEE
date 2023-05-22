@@ -13,7 +13,7 @@ namespace ApiReperenceServer.Source.Models.Posts
         #endregion   
 
         #region [작성일시]
-        public DateTime CreatedAt { get; set; }
+        public string CreatedAt { get; set; }
         #endregion
 
         #region [작성자 제목]
