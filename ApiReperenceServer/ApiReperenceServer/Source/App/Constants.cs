@@ -49,7 +49,7 @@ namespace ApiReperenceServer.Source.App
             #endregion
 
             #region [에러 로그 라인]
-            private const string ErrLine = "===========================";
+            private const string ErrLine = "====================================================";
             #endregion
 
             public static void ErrLogLine()
@@ -59,7 +59,7 @@ namespace ApiReperenceServer.Source.App
 
             public static void ErrLogParam(string param, object request)
             {
-                System.Diagnostics.Debug.WriteLine(param, "param : " + request);
+                System.Diagnostics.Debug.WriteLine(param, "에러 메소드명(:파라미터) ::: " + request);
             }
 
             public static void ErrLogMsg(Exception ex)

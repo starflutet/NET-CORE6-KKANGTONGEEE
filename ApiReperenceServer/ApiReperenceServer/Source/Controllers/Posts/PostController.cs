@@ -4,8 +4,6 @@ using ApiReperenceServer.Source.Models.Posts;
 using ApiReperenceServer.Source.Serialize.Posts;
 using Microsoft.AspNetCore.Mvc;
 
-using ResponseGetPostList = ApiReperenceServer.Source.Serialize.Posts.ResponseGetPostList;
-
 namespace ApiReperenceServer.Source.Controllers.Posts
 {
     [ApiController]
@@ -20,6 +18,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts
             _logger = logger;
         }
 
+        #region [목록조회 시리즈들 - 난 4번으로 할것임]
         #region [포스트 목록 조회]
         //파라미터 객체 응답값 객체
         //장점 ::: 받을값과 응답값을 내가 커스텀할수있음 + 스웨거 문서가 맛있게 만들어짐
@@ -91,6 +90,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts
 
             yield return response;
         }
+        #endregion
         #endregion
 
         #region [포스트 목록 상세]        

@@ -14,7 +14,7 @@ namespace ApiReperenceServer.Source.Serialize.Posts
         #endregion               
 
         #region [포스트 데이터]
-        public MPosts? Data { get; set; }
+        public MGetPostDetail? Data { get; set; }
         #endregion        
 
     }

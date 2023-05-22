@@ -3,6 +3,7 @@ using ApiReperenceServer.Source.DSerialize;
 using ApiReperenceServer.Source.Models.Posts;
 using ApiReperenceServer.Source.Serialize.Posts;
 using Oracle.ManagedDataAccess.Client;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Reflection;
@@ -13,7 +14,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
     public class PostsImpl
     {
         #region [목록을 가져오기위한 반복 메소드]
-        public static List<MPosts> selectList(OracleCommand command)
+        public static List<MPosts> selectListTwo(OracleCommand command)
         {
             List<MPosts> resultList = new();
 
@@ -53,7 +54,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         #endregion
 
         #region [목록을 가져오기위한 반복 메소드 2]
-        public static List<Dictionary<string, object>> selectListTwo(OracleCommand command)
+        public static List<Dictionary<string, object>> selectList(OracleCommand command)
         {
             List<Dictionary<string, object>> resultList = new();
 
@@ -110,6 +111,28 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
                 }
                 return resultDetail;
             }
+        }
+        #endregion
+
+        #region [상세 조회- 두번째 방식]
+        public static Dictionary<string, object> selectOne(OracleCommand command)
+        {
+            Dictionary<string, object> resultDetail = new();
+
+            using OracleDataReader dataReader = command.ExecuteReader();
+            if (dataReader.HasRows)
+            {
+                while (dataReader.Read())
+                {
+                    for (int i = 0; i < dataReader.VisibleFieldCount; i++)
+                    {
+                        string dataColName = dataReader.GetName(i).ToLower().Replace("_", "");
+
+                        resultDetail.Add(dataColName, dataReader.GetValue(i));
+                    }
+                }
+            }
+            return resultDetail;
         }
         #endregion
 
@@ -201,113 +224,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
             }
             return response;
         }
-        #endregion
-
-        #region [구현 - 포스트목록조회4]
-        public static ResponseGetPostList GetPostListFore(RequestGetPostList request)
-        {
-            ResponseGetPostList response = new();
-
-            using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
-            {
-                using (
-                    OracleCommand command = new()
-                    {
-                        Connection = connection,
-                        CommandText = "PKG_POSTS.GetPostList",
-                        CommandType = CommandType.StoredProcedure
-                    })
-                {
-                    try
-                    {
-                        #region [리스트 초기화]
-                        List<Dictionary<string, object>> exeDb = new();
-                        List<MGetPostList> mPostsList = new();
-                        #endregion
-
-                        #region [입력 파라미터]
-                        command.Parameters.Add(new OracleParameter("in_limit", OracleDbType.Int32)).Value = request.LimitCnt;
-                        #endregion
-
-                        #region [리턴 파라미터]
-                        command.Parameters.Add(new OracleParameter("out_result_code", OracleDbType.Varchar2, DataLength.out_code)).Direction = ParameterDirection.Output;
-                        command.Parameters.Add(new OracleParameter("out_result_message", OracleDbType.Varchar2, DataLength.out_long_msg)).Direction = ParameterDirection.Output;
-                        command.Parameters.Add(new OracleParameter("out_result_data", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
-                        #endregion
-
-                        #region [디비 커넥션 연결] 
-                        connection.Open();
-                        #endregion
-
-                        #region [디비사용]
-                        exeDb = selectListTwo(command);
-
-                        #region [객체의 프로퍼티 명 가져오기]
-                        Type postsType = typeof(MGetPostList);
-                        PropertyInfo[] properties = postsType.GetProperties();
-                        #endregion
-
-                        foreach (Dictionary<string, object> dictionary in exeDb)
-                        {
-                            MGetPostList obj = new();
-                            foreach (KeyValuePair<string, object> kvp in dictionary)
-                            {
-                                foreach (PropertyInfo property in properties)
-                                {
-                                    string propertyName = property.Name.ToLower().Replace("_", "");
-                                    string key = kvp.Key.ToLower().Replace("_", "");
-                                    object value = kvp.Value;
-                                    if (propertyName.Equals(key))
-                                    {
-                                        switch (propertyName)
-                                        {
-                                            case "id":
-                                                obj.Id = Convert.ToInt32(value);
-                                                break;
-                                            case "title":
-                                                obj.Title = Convert.ToString(value);
-                                                break;
-                                            case "createdat":
-                                                obj.CreatedAt = MyUtils.ConvertYYYYMMDDHHmmss(Convert.ToDateTime(value));
-                                                break;
-                                            case "author":
-                                                obj.Author = Convert.ToString(value);
-                                                break;
-                                        }
-                                    }
-                                }
-                            }
-                            mPostsList.Add(obj);
-                        }
-
-                        response.Data = mPostsList;
-                        #endregion                                              
-
-                        #region [결과값 세팅]
-                        response.Result_Code = command.Parameters["out_result_code"].Value.ToString();
-                        response.Result_Msg = command.Parameters["out_result_message"].Value.ToString();
-                        #endregion
-                    }
-                    catch (Exception ex)
-                    {
-                        #region [에러 메시지 세팅]
-                        response.Result_Code = "ERROR";
-                        response.Result_Msg = ex.Message;
-
-                        if (LogUtil.ErrLogYn == true)
-                        {
-                            LogUtil.ErrLogParam("Post-GetPostList", request);
-                            LogUtil.ErrLogLine();
-                            LogUtil.ErrLogMsg(ex);
-                            LogUtil.ErrLogLine();
-                        }
-                        #endregion
-                    }
-                }
-            }
-            return response;
-        }
-        #endregion
+        #endregion        
 
         #region [구현 - 포스트목록조회 2]
         public static Dictionary<string, object> GetPostListTwo(Dictionary<string, object> request)
@@ -433,32 +350,38 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         }
         #endregion
 
-        #region [구현 - 포스트목록상세]
-        public static ResponseGetPostDetail GetPostDetail(RequestGetPostDetail request)
+        #region [구현 - 포스트목록조회4]
+        public static ResponseGetPostList GetPostListFore(RequestGetPostList request)
         {
-            ResponseGetPostDetail response = new ResponseGetPostDetail();
+            #region [응답객체 초기화 - 세팅]
+            ResponseGetPostList response = new();
+            #endregion
 
-            using (OracleConnection connection = new OracleConnection(DataBaseConf.ConnectionStrings))
+            using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
             {
                 using (
-                    OracleCommand command = new OracleCommand
+                    OracleCommand command = new()
                     {
                         Connection = connection,
-                        CommandText = "PKG_POSTS.GetPostDetail",
+                        CommandText = "PKG_POSTS.GetPostList",
                         CommandType = CommandType.StoredProcedure
                     })
                 {
                     try
                     {
-                        #region [리스트 초기화]
-                        List<MPosts> postsList = new List<MPosts>();
+                        #region [환경설정 - 초기화]
+                        List<Dictionary<string, object>> exeDb = new();
+                        #region [모델 초기화 - 세팅]
+                        List<MGetPostList> mPostsList = new();
+                        MGetPostList obj = new();
+                        #endregion
                         #endregion
 
-                        #region [입력 파라미터]
-                        command.Parameters.Add(new OracleParameter("in_id", OracleDbType.Int32)).Value = request.Id;
+                        #region [입력 파라미터 - 세팅]
+                        command.Parameters.Add(new OracleParameter("in_limit", OracleDbType.Int32)).Value = request.LimitCnt;
                         #endregion
 
-                        #region [리턴 파라미터]
+                        #region [리턴 파라미터 - 세팅]
                         command.Parameters.Add(new OracleParameter("out_result_code", OracleDbType.Varchar2, DataLength.out_code)).Direction = ParameterDirection.Output;
                         command.Parameters.Add(new OracleParameter("out_result_message", OracleDbType.Varchar2, DataLength.out_long_msg)).Direction = ParameterDirection.Output;
                         command.Parameters.Add(new OracleParameter("out_result_data", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
@@ -468,24 +391,67 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
                         connection.Open();
                         #endregion
 
-                        #region [디비사용]
-                        response.Data = selectDetail(command);
+                        #region [디비사용 - 다수조회면 selectList]
+                        exeDb = selectList(command);
+
+                        #region [객체의 프로퍼티 명 가져오기]
+                        Type postsType = obj.GetType();
+                        PropertyInfo[] properties = postsType.GetProperties();
                         #endregion
 
-                        #region [결과값 세팅]
+                        foreach (Dictionary<string, object> dictionary in exeDb)
+                        {
+                            obj = new();
+                            foreach (KeyValuePair<string, object> kvp in dictionary)
+                            {
+                                foreach (PropertyInfo property in properties)
+                                {
+                                    string propertyName = property.Name.ToLower().Replace("_", "");
+                                    string key = kvp.Key.ToLower().Replace("_", "");
+                                    object value = kvp.Value;
+                                    if (propertyName.Equals(key))
+                                    {
+                                        #region[프로퍼티 매핑 - 세팅]
+                                        switch (propertyName)
+                                        {
+                                            case "id":
+                                                obj.Id = Convert.ToInt32(value);
+                                                break;
+                                            case "title":
+                                                obj.Title = Convert.ToString(value);
+                                                break;
+                                            case "createdat":
+                                                obj.CreatedAt = MyUtils.ConvertYYYYMMDDHHmmss(Convert.ToDateTime(value));
+                                                break;
+                                            case "author":
+                                                obj.Author = Convert.ToString(value);
+                                                break;
+                                        }
+                                        #endregion
+                                    }
+                                }
+                            }
+                            mPostsList.Add(obj);
+                        }
+
+                        response.Data = mPostsList;
+                        #endregion                                              
+
+                        #region [결과값 - 세팅]
                         response.Result_Code = command.Parameters["out_result_code"].Value.ToString();
                         response.Result_Msg = command.Parameters["out_result_message"].Value.ToString();
                         #endregion
                     }
                     catch (Exception ex)
                     {
-                        #region [에러 메시지 세팅]
+                        #region [에러 메시지]
                         response.Result_Code = "ERROR";
                         response.Result_Msg = ex.Message;
 
                         if (LogUtil.ErrLogYn == true)
                         {
-                            LogUtil.ErrLogParam("Post-GetPostList", request);
+                            string methodName = MethodBase.GetCurrentMethod()!.Name;
+                            LogUtil.ErrLogParam(methodName, request);
                             LogUtil.ErrLogLine();
                             LogUtil.ErrLogMsg(ex);
                             LogUtil.ErrLogLine();
@@ -498,6 +464,113 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         }
         #endregion
 
+        #region [구현 - 포스트목록상세]
+        public static ResponseGetPostDetail GetPostDetail(RequestGetPostDetail request)
+        {
+            #region [응답객체 초기화 - 세팅]
+            ResponseGetPostDetail response = new();
+            #endregion
 
+            using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
+            {
+                using (
+                    OracleCommand command = new()
+                    {
+                        Connection = connection,
+                        CommandText = "PKG_POSTS.GetPostDetail",
+                        CommandType = CommandType.StoredProcedure
+                    })
+                {
+                    try
+                    {
+                        #region [환경설정 - 초기화]                        
+                        Dictionary<string, object> exeDb = new();
+                        #region [모델 초기화 - 세팅]
+                        MGetPostDetail obj = new();
+                        #endregion
+                        #endregion
+
+                        #region [입력 파라미터 - 세팅]
+                        command.Parameters.Add(new OracleParameter("in_id", OracleDbType.Int32)).Value = request.Id;
+                        #endregion
+
+                        #region [리턴 파라미터 - 세팅]
+                        command.Parameters.Add(new OracleParameter("out_result_code", OracleDbType.Varchar2, DataLength.out_code)).Direction = ParameterDirection.Output;
+                        command.Parameters.Add(new OracleParameter("out_result_message", OracleDbType.Varchar2, DataLength.out_long_msg)).Direction = ParameterDirection.Output;
+                        command.Parameters.Add(new OracleParameter("out_result_data", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
+                        #endregion
+
+                        #region [디비 커넥션 연결] 
+                        connection.Open();
+                        #endregion
+
+                        #region [객체의 프로퍼티 명 가져오기]                        
+                        Type postsType = obj.GetType();
+                        PropertyInfo[] properties = postsType.GetProperties();
+                        #endregion
+
+                        #region [디비사용 - 하나만 조회면 selectOne]
+                        exeDb = selectOne(command);
+
+                        foreach (PropertyInfo property in properties)
+                        {
+                            string propertyName = property.Name.ToLower().Replace("_", "");
+
+                            foreach (string key in exeDb.Keys)
+                            {
+                                object value = exeDb[key];
+
+                                if (propertyName.Equals(key))
+                                {
+                                    #region[프로퍼티 매핑 - 세팅]
+                                    switch (propertyName)
+                                    {
+                                        case "id":
+                                            obj.Id = Convert.ToInt32(value);
+                                            break;
+                                        case "title":
+                                            obj.Title = Convert.ToString(value);
+                                            break;
+                                        case "content":
+                                            obj.Content = Convert.ToString(value);
+                                            break;
+                                        case "createdat":
+                                            obj.CreatedAt = MyUtils.ConvertYYYYMMDDHHmmss(Convert.ToDateTime(value));
+                                            break;
+                                    }
+                                    #endregion
+                                }
+                            }
+                        }
+
+                        response.Data = obj;
+                        #endregion
+
+                        #region [결과값 - 세팅]
+                        response.Result_Code = command.Parameters["out_result_code"].Value.ToString();
+                        response.Result_Msg = command.Parameters["out_result_message"].Value.ToString();
+                        #endregion
+                    }
+                    catch (Exception ex)
+                    {
+                        #region [에러 메시지]
+                        response.Result_Code = "ERROR";
+                        response.Result_Msg = ex.Message;
+
+                        if (LogUtil.ErrLogYn == true)
+                        {
+                            string methodName = MethodBase.GetCurrentMethod()!.Name;
+                            LogUtil.ErrLogParam(methodName, request);
+                            LogUtil.ErrLogLine();
+                            LogUtil.ErrLogMsg(ex);
+                            LogUtil.ErrLogLine();
+                        }
+                        #endregion
+                    }
+                }
+            }
+            return response;
+        }
+        #endregion
     }
 }
