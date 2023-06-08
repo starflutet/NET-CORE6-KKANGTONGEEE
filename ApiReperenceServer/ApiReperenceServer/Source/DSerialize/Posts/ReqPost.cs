@@ -1,6 +1,6 @@
 namespace ApiReperenceServer.Source.DSerialize
 {
-    public class RequestAddPost
+    public class ReqPost
     {
         #region [제목]
         public string? Title { get; set; }

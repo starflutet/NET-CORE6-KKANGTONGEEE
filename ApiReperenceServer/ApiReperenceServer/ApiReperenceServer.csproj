@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="OptimizedPriorityQueue" Version="5.1.0" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.100" />
+    <PackageReference Include="PriorityQueue" Version="0.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.6" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />

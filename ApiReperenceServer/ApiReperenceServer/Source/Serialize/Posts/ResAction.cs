@@ -3,7 +3,7 @@ using ApiReperenceServer.Source.Models.Posts;
 
 namespace ApiReperenceServer.Source.Serialize.Posts
 {
-    public class ResponseAction
+    public class ResAction
     {
         #region [결과코드]
         public string? Result_Code { get; set; }

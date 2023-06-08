@@ -2,7 +2,7 @@ using ApiReperenceServer.Source.Models.Posts;
 
 namespace ApiReperenceServer.Source.Serialize.Posts
 {
-    public class ResponseGetPostList
+    public class ResGetPostList
     {
         #region [결과코드]
         public string? Result_Code { get; set; }

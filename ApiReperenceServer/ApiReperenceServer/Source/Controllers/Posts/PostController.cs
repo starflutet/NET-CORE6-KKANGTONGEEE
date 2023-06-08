@@ -1,4 +1,4 @@
-using ApiReperenceServer.Source.Controllers.Posts.Service;
+using ApiReperenceServer.Source.Controllers.Posts.Feature;
 using ApiReperenceServer.Source.DSerialize;
 using ApiReperenceServer.Source.Models.Posts;
 using ApiReperenceServer.Source.Serialize.Posts;
@@ -29,9 +29,9 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost(Name = "GetPostList")]
-        public IEnumerable<ResponseGetPostList> GetPostList(RequestGetPostList request)
+        public IEnumerable<ResGetPostList> GetPostList(ReqGetPostList request)
         {
-            ResponseGetPostList response = PostsImpl.GetPostList(request);
+            ResGetPostList response = FPosts.GetPostList(request);
 
             yield return response;
         }
@@ -49,7 +49,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         [HttpPost(Name = "GetPostListTwo")]
         public IEnumerable<Dictionary<string, object>> GetPostListTwo(Dictionary<string, object> request)
         {
-            Dictionary<string, object> response = PostsImpl.GetPostListTwo(request);
+            Dictionary<string, object> response = FPosts.GetPostListTwo(request);
 
             yield return response;
         }
@@ -65,9 +65,9 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost(Name = "GetPostListThree")]
-        public IEnumerable<Dictionary<string, object>> GetPostListThree(RequestGetPostList request)
+        public IEnumerable<Dictionary<string, object>> GetPostListThree(ReqGetPostList request)
         {
-            Dictionary<string, object> response = PostsImpl.GetPostListThree(request);
+            Dictionary<string, object> response = FPosts.GetPostListThree(request);
 
             yield return response;
         }
@@ -84,9 +84,9 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost(Name = "GetPostListFore")]
-        public IEnumerable<ResponseGetPostList> GetPostListFore(RequestGetPostList request)
+        public IEnumerable<ResGetPostList> GetPostListFore(ReqGetPostList request)
         {
-            ResponseGetPostList response = PostsImpl.GetPostListFore(request);
+            ResGetPostList response = FPosts.GetPostListFore(request);
 
             yield return response;
         }
@@ -95,9 +95,9 @@ namespace ApiReperenceServer.Source.Controllers.Posts
 
         #region [포스트 목록 상세]        
         [HttpPost(Name = "GetPostDetail")]
-        public IEnumerable<ResponseGetPostDetail> GetPostDetail(RequestGetPostDetail request)
+        public IEnumerable<ResGetPostDetail> GetPostDetail(ReqGetPostDetail request)
         {
-            ResponseGetPostDetail response = PostsImpl.GetPostDetail(request);
+            ResGetPostDetail response = FPosts.GetPostDetail(request);
 
             yield return response;
         }
@@ -105,9 +105,9 @@ namespace ApiReperenceServer.Source.Controllers.Posts
 
         #region [포스트 등록]        
         [HttpPost(Name = "AddPost")]
-        public IEnumerable<ResponseAction> AddPost(RequestAddPost request)
+        public IEnumerable<ResAction> AddPost(ReqPost request)
         {
-            ResponseAction response = PostsImpl.AddPost(request);
+            ResAction response = FPosts.AddPost(request);
 
             yield return response;
         }

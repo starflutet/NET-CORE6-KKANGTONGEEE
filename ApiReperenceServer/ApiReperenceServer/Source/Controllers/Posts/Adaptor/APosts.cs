@@ -9,9 +9,9 @@ using System.Data.Common;
 using System.Reflection;
 using static ApiReperenceServer.Source.App.Constants;
 
-namespace ApiReperenceServer.Source.Controllers.Posts.Service
+namespace ApiReperenceServer.Source.Controllers.Posts.Adaptor
 {
-    public class PostsImpl
+    public class APosts
     {
         #region [목록을 가져오기위한 반복 메소드]
         public static List<MPosts> selectListTwo(OracleCommand command)
@@ -184,9 +184,9 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         #endregion
 
         #region [구현 - 포스트목록조회]
-        public static ResponseGetPostList GetPostList(RequestGetPostList request)
+        public static ResGetPostList GetPostList(ReqGetPostList request)
         {
-            ResponseGetPostList response = new ResponseGetPostList();
+            ResGetPostList response = new ResGetPostList();
 
             using (OracleConnection connection = new OracleConnection(DataBaseConf.ConnectionStrings))
             {
@@ -308,7 +308,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         #endregion
 
         #region [구현 - 포스트목록조회 3]
-        public static Dictionary<string, object> GetPostListThree(RequestGetPostList request)
+        public static Dictionary<string, object> GetPostListThree(ReqGetPostList request)
         {
             Dictionary<string, object> response = new Dictionary<string, object>();
 
@@ -370,10 +370,10 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         #endregion
 
         #region [구현 - 포스트목록조회4]
-        public static ResponseGetPostList GetPostListFore(RequestGetPostList request)
+        public static ResGetPostList GetPostListFore(ReqGetPostList request)
         {
             #region [응답객체 초기화 - 세팅]
-            ResponseGetPostList response = new();
+            ResGetPostList response = new();
             #endregion
 
             using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
@@ -481,10 +481,10 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         #endregion
 
         #region [구현 - 포스트목록상세]
-        public static ResponseGetPostDetail GetPostDetail(RequestGetPostDetail request)
+        public static ResGetPostDetail GetPostDetail(ReqGetPostDetail request)
         {
             #region [응답객체 초기화 - 세팅]
-            ResponseGetPostDetail response = new();
+            ResGetPostDetail response = new();
             #endregion
 
             using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
@@ -587,10 +587,10 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         #endregion
 
         #region [구현 - 포스트 등록]
-        public static ResponseAction AddPost(RequestAddPost request)
+        public static ResAction AddPost(ReqPost request)
         {
             #region [응답객체 초기화 - 세팅]
-            ResponseAction response = new();
+            ResAction response = new();
             #endregion
 
             using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
