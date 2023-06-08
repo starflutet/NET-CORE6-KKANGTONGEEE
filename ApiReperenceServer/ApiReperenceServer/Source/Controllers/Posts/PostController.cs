@@ -84,8 +84,9 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost(Name = "GetPostListFore")]
-        public IEnumerable<ResGetPostList> GetPostListFore(ReqGetPostList request)
+        public IEnumerable<ResGetPostList> GetPostListFore(ReqGetPostList request, string? apiKey)
         {
+
             ResGetPostList response = SPosts.GetPostListFore(request);
 
             yield return response;

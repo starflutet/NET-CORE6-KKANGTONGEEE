@@ -4,6 +4,6 @@ namespace ApiReperenceServer.Source.DSerialize
     {
         #region [목록 개수제한]
         public int LimitCnt { get; set; }
-        #endregion        
+        #endregion
     }
 }
