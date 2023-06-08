@@ -10,7 +10,7 @@ using System.Data.Common;
 using System.Reflection;
 using static ApiReperenceServer.Source.App.Constants;
 
-namespace ApiReperenceServer.Source.Controllers.Posts.Feature
+namespace ApiReperenceServer.Source.Controllers.Posts.Service
 {
     public class FPosts
     {
