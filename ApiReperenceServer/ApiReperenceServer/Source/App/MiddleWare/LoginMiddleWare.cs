@@ -1,10 +1,10 @@
 using System.Text.Json;
 
-public class LoginInterCeptor
+public class LoginMiddleWare
 {
     private readonly RequestDelegate _next;
 
-    public LoginInterCeptor(RequestDelegate next)
+    public LoginMiddleWare(RequestDelegate next)
     {
         _next = next;
     }

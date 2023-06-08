@@ -50,7 +50,7 @@ app.MapControllers();
 app.UseSession();
 
 // 미들웨어(인터셉터 등록)
-app.UseMiddleware<LoginInterCeptor>();
+app.UseMiddleware<LoginMiddleWare>();
 
 app.Run();
 
