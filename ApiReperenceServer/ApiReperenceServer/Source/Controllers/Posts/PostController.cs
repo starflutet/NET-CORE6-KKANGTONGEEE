@@ -1,4 +1,4 @@
-using ApiReperenceServer.Source.Controllers.Posts.Feature;
+using ApiReperenceServer.Source.Controllers.Posts.Service;
 using ApiReperenceServer.Source.DSerialize;
 using ApiReperenceServer.Source.Models.Posts;
 using ApiReperenceServer.Source.Serialize.Posts;
@@ -31,7 +31,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         [HttpPost(Name = "GetPostList")]
         public IEnumerable<ResGetPostList> GetPostList(ReqGetPostList request)
         {
-            ResGetPostList response = FPosts.GetPostList(request);
+            ResGetPostList response = SPosts.GetPostList(request);
 
             yield return response;
         }
@@ -49,7 +49,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         [HttpPost(Name = "GetPostListTwo")]
         public IEnumerable<Dictionary<string, object>> GetPostListTwo(Dictionary<string, object> request)
         {
-            Dictionary<string, object> response = FPosts.GetPostListTwo(request);
+            Dictionary<string, object> response = SPosts.GetPostListTwo(request);
 
             yield return response;
         }
@@ -67,7 +67,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         [HttpPost(Name = "GetPostListThree")]
         public IEnumerable<Dictionary<string, object>> GetPostListThree(ReqGetPostList request)
         {
-            Dictionary<string, object> response = FPosts.GetPostListThree(request);
+            Dictionary<string, object> response = SPosts.GetPostListThree(request);
 
             yield return response;
         }
@@ -86,7 +86,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         [HttpPost(Name = "GetPostListFore")]
         public IEnumerable<ResGetPostList> GetPostListFore(ReqGetPostList request)
         {
-            ResGetPostList response = FPosts.GetPostListFore(request);
+            ResGetPostList response = SPosts.GetPostListFore(request);
 
             yield return response;
         }
@@ -97,7 +97,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         [HttpPost(Name = "GetPostDetail")]
         public IEnumerable<ResGetPostDetail> GetPostDetail(ReqGetPostDetail request)
         {
-            ResGetPostDetail response = FPosts.GetPostDetail(request);
+            ResGetPostDetail response = SPosts.GetPostDetail(request);
 
             yield return response;
         }
@@ -107,7 +107,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         [HttpPost(Name = "AddPost")]
         public IEnumerable<ResAction> AddPost(ReqPost request)
         {
-            ResAction response = FPosts.AddPost(request);
+            ResAction response = SPosts.AddPost(request);
 
             yield return response;
         }

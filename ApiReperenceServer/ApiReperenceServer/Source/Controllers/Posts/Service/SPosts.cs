@@ -12,7 +12,7 @@ using static ApiReperenceServer.Source.App.Constants;
 
 namespace ApiReperenceServer.Source.Controllers.Posts.Service
 {
-    public class FPosts
+    public class SPosts
     {
         #region [구현 - 포스트목록조회]
         public static ResGetPostList GetPostList(ReqGetPostList request)
