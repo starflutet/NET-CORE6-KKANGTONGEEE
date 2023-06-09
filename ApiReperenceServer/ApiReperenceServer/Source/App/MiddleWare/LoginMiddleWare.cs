@@ -11,6 +11,7 @@ public class LoginMiddleWare
 
     public async Task Invoke(HttpContext context)
     {
+        #region [ 로그인 체크 미들웨어 ]
         if (context.Request.Path.StartsWithSegments("/UserControllers"))
         {
             await _next(context);
@@ -38,5 +39,6 @@ public class LoginMiddleWare
                 await _next(context);
             }
         }
+        #endregion
     }
 }
