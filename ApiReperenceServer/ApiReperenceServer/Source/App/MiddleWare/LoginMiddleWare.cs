@@ -24,8 +24,8 @@ public class LoginMiddleWare
 
                 var response = new
                 {
-                    status = -1,
-                    message = "로그인이 필요합니다."
+                    result_Code = "-1",
+                    result_Msg = "로그인이 필요합니다."
                 };
 
                 #region [ JSON 형식으로 응답값 반환 ]

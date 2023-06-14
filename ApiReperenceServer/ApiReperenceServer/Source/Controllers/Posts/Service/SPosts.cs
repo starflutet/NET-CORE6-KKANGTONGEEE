@@ -1,14 +1,6 @@
-using ApiReperenceServer.Source.App;
 using ApiReperenceServer.Source.Controllers.Posts.Adaptor;
 using ApiReperenceServer.Source.DSerialize;
-using ApiReperenceServer.Source.Models.Posts;
 using ApiReperenceServer.Source.Serialize.Posts;
-using Oracle.ManagedDataAccess.Client;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Reflection;
-using static ApiReperenceServer.Source.App.Constants;
 
 namespace ApiReperenceServer.Source.Controllers.Posts.Service
 {
@@ -45,6 +37,15 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Service
         public static ResGetPostList GetPostListFore(ReqGetPostList request)
         {
             ResGetPostList response = APosts.GetPostListFore(request);
+
+            return response;
+        }
+        #endregion
+
+        #region [구현 - 포스트목록조회5]
+        public static ResGetPostList GetPostListFive(ReqGetPostList request)
+        {
+            ResGetPostList response = APosts.GetPostListFive(request);
 
             return response;
         }

@@ -1,11 +1,15 @@
 using ApiReperenceServer.Source.App;
+
+using ApiReperenceServer.Source.App.DapperUtils;
 using ApiReperenceServer.Source.DSerialize;
 using ApiReperenceServer.Source.Models.Posts;
 using ApiReperenceServer.Source.Serialize.Posts;
+using Dapper;
+using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
-using System.Data.Common;
+using System.Linq;
 using System.Reflection;
 using static ApiReperenceServer.Source.App.Constants;
 
@@ -40,7 +44,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Adaptor
                                 string dataColName = dataReader.GetName(i).ToLower().Replace("_", "");
                                 if (propertyName.Equals(dataColName))
                                 {
-                                    obj = setPostObj(propertyName, obj, dataReader.GetValue(i));
+                                    //obj = setPostObj(propertyName, obj, dataReader.GetValue(i));
                                 }
                             }
                         }
@@ -102,7 +106,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Adaptor
                                 string dataColName = dataReader.GetName(i).ToLower().Replace("_", "");
                                 if (propertyName.Equals(dataColName))
                                 {
-                                    resultDetail = setPostObj(propertyName, resultDetail, dataReader.GetValue(i));
+                                    //resultDetail = setPostObj(propertyName, resultDetail, dataReader.GetValue(i));
                                 }
                             }
                         }
@@ -136,7 +140,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Adaptor
         }
         #endregion
 
-        #region [Posts-프로퍼티 세팅 메소드]
+        /*#region [Posts-프로퍼티 세팅 메소드]
         public static MPosts setPostObj(string propertiesName, MPosts obj, object value)
         {
             switch (propertiesName)
@@ -159,7 +163,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Adaptor
             }
             return obj;
         }
-        #endregion
+        #endregion*/
 
         #region [등록,수정,삭제 용도 = 동작만 하면 되는애들]
         public static Dictionary<string, object> acttionDb(OracleCommand command)
@@ -431,8 +435,8 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Adaptor
                                     #region[프로퍼티 매핑 - 세팅]
                                     switch (propertyName)
                                     {
-                                        case "id":
-                                            obj.Id = Convert.ToInt32(value);
+                                        /*case "id":
+                                            //obj.Id = Convert.ToInt32(value);
                                             break;
                                         case "title":
                                             obj.Title = Convert.ToString(value);
@@ -442,7 +446,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Adaptor
                                             break;
                                         case "author":
                                             obj.Author = Convert.ToString(value);
-                                            break;
+                                            break;*/
                                     }
                                     #endregion
                                 }
@@ -478,6 +482,48 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Adaptor
             }
             return response;
         }
+        #endregion
+
+
+        #region [구현 - 포스트목록조회5]
+        public static ResGetPostList GetPostListFive(ReqGetPostList request)
+        {
+            #region [응답객체 초기화 - 세팅]
+            ResGetPostList response = new();
+            #endregion
+
+            using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
+            {
+                OracleDynamicParameters parameters = new();
+
+                parameters.AddIn("in_limit", Convert.ToInt32(request.LimitCnt), OracleDbType.Int32);
+                parameters.AddOut("out_result_code", OracleDbType.Varchar2, ParameterDirection.Output, DataLength.out_code);
+                parameters.AddOut("out_result_message", OracleDbType.Varchar2, ParameterDirection.Output, DataLength.out_long_msg);
+                parameters.AddOutRef("out_result_data", OracleDbType.RefCursor, ParameterDirection.Output);
+
+                var resultList = connection.Query<MGetPostList>
+                (
+                    "PKG_POSTS.GetPostList",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure
+                )
+                .ToList();
+
+                int out_result_code_index = parameters.oracleParameterList.FindIndex(p => p.ParameterName == "out_result_code");
+                int out_result_message_index = parameters.oracleParameterList.FindIndex(p => p.ParameterName == "out_result_message");
+
+                string? out_result_code = Convert.ToString(parameters.oracleParameterList[out_result_code_index].Value);
+                string? out_result_message = Convert.ToString(parameters.oracleParameterList[out_result_message_index].Value);
+
+                response.Result_Code = out_result_code;
+                response.Result_Msg = out_result_message;
+                response.Data = resultList;
+
+            }
+
+            return response;
+        }
+
         #endregion
 
         #region [구현 - 포스트목록상세]

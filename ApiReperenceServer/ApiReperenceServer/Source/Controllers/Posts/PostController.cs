@@ -1,8 +1,8 @@
 using ApiReperenceServer.Source.Controllers.Posts.Service;
 using ApiReperenceServer.Source.DSerialize;
-using ApiReperenceServer.Source.Models.Posts;
 using ApiReperenceServer.Source.Serialize.Posts;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ApiReperenceServer.Source.Controllers.Posts
 {
@@ -90,6 +90,24 @@ namespace ApiReperenceServer.Source.Controllers.Posts
             ResGetPostList response = SPosts.GetPostListFore(request);
 
             yield return response;
+        }
+        #endregion
+
+        #region [포스트 목록 조회5 - 대퍼방식]
+        // Dapper 라고 맛있는친구있길래 이거 사용해봄        
+        /// <summary>
+        /// 포스트 목록 조회
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost(Name = "GetPostListFive")]
+        public IActionResult GetPostListFive(ReqGetPostList request)
+        {
+            ResGetPostList response = SPosts.GetPostListFive(request);
+
+            string json = JsonConvert.SerializeObject(response);
+
+            return Content(json, "application/json");
         }
         #endregion
         #endregion

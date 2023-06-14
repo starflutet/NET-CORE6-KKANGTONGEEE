@@ -1,8 +1,9 @@
 
 using Castle.DynamicProxy;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Filters;
-
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,17 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiReperenceServer Doc", Version = "0.0.1v" });
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 
 //1. 세션등록
 builder.Services.AddDistributedMemoryCache();
@@ -38,7 +50,10 @@ if (app.Environment.IsDevelopment())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyApiReperenceServer Doc 0.0.1v");
     });
+
 }
+
+app.UseCors("MyCorsPolicy");
 
 app.UseHttpsRedirection();
 
@@ -50,7 +65,7 @@ app.MapControllers();
 app.UseSession();
 
 // 미들웨어(인터셉터 등록)
-app.UseMiddleware<LoginMiddleWare>();
+//app.UseMiddleware<LoginMiddleWare>();
 
 app.Run();
 

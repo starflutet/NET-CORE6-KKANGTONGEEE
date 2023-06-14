@@ -1,10 +1,12 @@
 using Oracle.ManagedDataAccess.Client;
+using System.ComponentModel;
 
 namespace ApiReperenceServer.Source.Models.Posts
 {
     public class MPosts
     {
         #region [아이디]
+        [Description("Id")]
         public int Id { get; set; }
         #endregion
 

@@ -1,23 +1,24 @@
 using ApiReperenceServer.Source.Models.Posts;
+using Dapper;
+using Newtonsoft.Json;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiReperenceServer.Source.Models.Posts
 {
     public class MGetPostList
     {
-        #region [아이디]
-        public int Id { get; set; }
-        #endregion
+        [JsonProperty("id")]
+        public int ID { get; set; }
 
-        #region [제목]
-        public string? Title { get; set; }
-        #endregion   
+        [JsonProperty("title")]
+        public string? TITLE { get; set; }
 
-        #region [작성일시]
-        public string CreatedAt { get; set; }
-        #endregion
+        [JsonProperty("createAt")]
+        public string? CREATE_AT { get; set; }
 
-        #region [작성자 제목]
-        public string? Author { get; set; }
-        #endregion
+        [JsonProperty("author")]
+        public string? AUTHOR { get; set; }
+
     }
 }
