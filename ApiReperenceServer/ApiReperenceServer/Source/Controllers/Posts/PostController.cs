@@ -94,7 +94,8 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         #endregion
 
         #region [포스트 목록 조회5 - 대퍼방식]
-        // Dapper 라고 맛있는친구있길래 이거 사용해봄        
+        /// Dapper 라고 맛있는친구있길래 이거 사용해봄
+        /// 만들었지만 무지 편하다 앞으론 이거쓸거임 4번 너는 아니야 ㅋㅋㅋㅋㅋ
         /// <summary>
         /// 포스트 목록 조회
         /// </summary>
@@ -105,7 +106,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts
         {
             ResGetPostList response = SPosts.GetPostListFive(request);
 
-            string json = JsonConvert.SerializeObject(response);
+            string json = JsonConvert.SerializeObject(response, Formatting.None);
 
             return Content(json, "application/json");
         }
