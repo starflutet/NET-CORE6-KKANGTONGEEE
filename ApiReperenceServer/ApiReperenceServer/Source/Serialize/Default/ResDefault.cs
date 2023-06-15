@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace ApiReperenceServer.Source.Serialize.Default
 {
+    /// <summary>    
+    /// 상속해줄 공통적인 응답값을 관리합니다.
+    /// </summary>
     public class ResDefault
     {
         /// <summary>

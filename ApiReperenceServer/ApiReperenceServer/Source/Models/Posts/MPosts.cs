@@ -1,30 +1,28 @@
+using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
 using System.ComponentModel;
 
 namespace ApiReperenceServer.Source.Models.Posts
 {
+    /// <summary>
+    /// 포스트 모델
+    /// </summary>
     public class MPosts
     {
-        #region [아이디]
-        [Description("Id")]
-        public int Id { get; set; }
-        #endregion
+        [JsonProperty("id")]
+        public int ID { get; set; }
 
-        #region [제목]
-        public string? Title { get; set; }
-        #endregion
+        [JsonProperty("title")]
+        public string? TITLE { get; set; }
 
-        #region [내용]
-        public string? Content { get; set; }
-        #endregion
+        [JsonProperty("content")]
+        public string? CONTENT { get; set; }
 
-        #region [작성일시]
-        public DateTime CreatedAt { get; set; }
-        #endregion
+        [JsonProperty("createAt")]
+        public DateTime CREATE_AT { get; set; }
 
-        #region [작성자 제목]
-        public string? Author { get; set; }
-        #endregion
+        [JsonProperty("author")]
+        public string? AUTHOR { get; set; }
 
 
     }

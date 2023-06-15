@@ -4,6 +4,9 @@ using System.ComponentModel;
 
 namespace ApiReperenceServer.Source.Models.Posts
 {
+    /// <summary>
+    /// 사용자 모델
+    /// </summary>
     public class MMember
     {
         [JsonProperty("memberNo")]

@@ -1,28 +1,19 @@
 using ApiReperenceServer.Source.Models.Posts;
+using ApiReperenceServer.Source.Serialize.Default;
 using Newtonsoft.Json;
 
 namespace ApiReperenceServer.Source.Serialize.Posts
 {
-    public class ResGetPostList
+    /// <summary>
+    /// 포스트목록
+    /// </summary>
+    public class ResGetPostList : ResDefault
     {
-        /// <summary>
-        /// 결과코드
-        /// </summary>
-        [JsonProperty("resultCode")]
-        public string? Result_Code { get; set; }
-
-        /// <summary>
-        /// 결과 메시지
-        /// </summary>
-        [JsonProperty("resultMsg")]
-        public string? Result_Msg { get; set; }
-
         /// <summary>
         /// 포스트 결과 데이터
         /// </summary>
         [JsonProperty("data")]
         public List<MGetPostList>? Data { get; set; }
-
 
     }
 }

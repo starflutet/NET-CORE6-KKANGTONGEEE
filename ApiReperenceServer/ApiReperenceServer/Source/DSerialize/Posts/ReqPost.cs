@@ -1,21 +1,28 @@
 namespace ApiReperenceServer.Source.DSerialize
 {
+    /// <summary>
+    /// 공용으로 사용할 Req 값입니다.
+    /// </summary>
     public class ReqPost
     {
-        #region [제목]
+        /// <summary>
+        /// 제목
+        /// </summary>
         public string? Title { get; set; }
-        #endregion
 
-        #region [내용]
+        /// <summary>
+        /// 내용
+        /// </summary>
         public string? Content { get; set; }
-        #endregion
 
-        #region [작성일시]
+        /// <summary>
+        /// 생성일자
+        /// </summary>
         public string? CreatedAt { get; set; }
-        #endregion
 
-        #region [작성자 제목]
+        /// <summary>
+        /// 작성자
+        /// </summary>
         public string? Author { get; set; }
-        #endregion
     }
 }

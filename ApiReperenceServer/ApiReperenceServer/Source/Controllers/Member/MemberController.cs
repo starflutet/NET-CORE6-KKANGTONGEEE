@@ -47,7 +47,7 @@ namespace ApiReperenceServer.Source.Controllers.Member
         }
 
         /// <summary>
-        /// 
+        /// 로그아웃
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
