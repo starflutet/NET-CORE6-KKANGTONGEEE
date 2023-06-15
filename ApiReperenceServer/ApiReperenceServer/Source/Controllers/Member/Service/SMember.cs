@@ -44,5 +44,17 @@ namespace ApiReperenceServer.Source.Controllers.Member.Service
                 return "";
             }
         }
+
+        /// <summary>
+        /// 로그아웃
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static ResDefault Logout(ReqMember request)
+        {
+            ResDefault response = AMember.Logout(request);
+
+            return response;
+        }
     }
 }

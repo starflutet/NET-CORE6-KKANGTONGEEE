@@ -38,9 +38,23 @@ namespace ApiReperenceServer.Source.Controllers.Member
             {
                 //토큰 업데이트
                 string token = SMember.SetToken(response.Data![0].NO);
-                response.Data = new List<MMember> { new MMember() };
                 response.Data![0].TOKEN = token;
             }
+
+            string json = JsonConvert.SerializeObject(response, Formatting.None);
+
+            return Content(json, "application/json");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost(Name = "Logout")]
+        public IActionResult Logout(ReqMember request)
+        {
+            ResDefault response = SMember.Logout(request);
 
             string json = JsonConvert.SerializeObject(response, Formatting.None);
 

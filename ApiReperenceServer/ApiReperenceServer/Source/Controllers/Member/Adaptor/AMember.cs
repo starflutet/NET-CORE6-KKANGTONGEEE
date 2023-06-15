@@ -92,5 +92,39 @@ namespace ApiReperenceServer.Source.Controllers.Member.Adaptor
             return response;
         }
 
+        public static ResDefault Logout(ReqMember request)
+        {
+            ResDefault response = new();
+
+            using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
+            {
+                OracleDynamicParameters parameters = new();
+
+                parameters.AddIn("in_member_no", request.MemberNo!, OracleDbType.Varchar2);
+                parameters.AddOut("out_result_code", OracleDbType.Varchar2, ParameterDirection.Output, DataLength.out_code);
+                parameters.AddOut("out_result_message", OracleDbType.Varchar2, ParameterDirection.Output, DataLength.out_long_msg);
+
+                var resultList = connection.Query<MMember>
+                (
+                    "PKG_MEMBER.Logout",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure
+                )
+                .ToList();
+
+                int out_result_code_index = parameters.oracleParameterList.FindIndex(p => p.ParameterName == "out_result_code");
+                int out_result_message_index = parameters.oracleParameterList.FindIndex(p => p.ParameterName == "out_result_message");
+
+                string? out_result_code = Convert.ToString(parameters.oracleParameterList[out_result_code_index].Value);
+                string? out_result_message = Convert.ToString(parameters.oracleParameterList[out_result_message_index].Value);
+
+                response.Result_Code = out_result_code;
+                response.Result_Msg = out_result_message;
+
+            }
+
+            return response;
+        }
+
     }
 }

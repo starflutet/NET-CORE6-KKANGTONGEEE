@@ -6,7 +6,7 @@ namespace ApiReperenceServer.Source.Models.Posts
 {
     public class MMember
     {
-        [JsonProperty("no")]
+        [JsonProperty("memberNo")]
         public int NO { get; set; }
         [JsonProperty("id")]
         public string? ID { get; set; }
