@@ -1,9 +1,9 @@
 using ApiReperenceServer.Source.Models.Posts;
 using Newtonsoft.Json;
 
-namespace ApiReperenceServer.Source.Serialize.Posts
+namespace ApiReperenceServer.Source.Serialize.Member
 {
-    public class ResGetPostList
+    public class ResLogin
     {
         /// <summary>
         /// 결과코드
@@ -21,7 +21,7 @@ namespace ApiReperenceServer.Source.Serialize.Posts
         /// 포스트 결과 데이터
         /// </summary>
         [JsonProperty("data")]
-        public List<MGetPostList>? Data { get; set; }
+        public List<MMember>? Data { get; set; }
 
 
     }

@@ -21,7 +21,7 @@ namespace ApiReperenceServer.Source.App
             #endregion
 
             #region [사용자 아이디]
-            private const string UserId = "SYSTEM";
+            private const string UserId = "vorida";
             #endregion
 
             #region [사용자 비밀번호]
