@@ -27,6 +27,7 @@ namespace ApiReperenceServer.Source.Controllers.Posts.Adaptor
         /// <returns></returns>
         public static ResGetPostList GetPostList(ReqGetPostList request)
         {
+            //응답값 초기화
             ResGetPostList response = new();
 
             using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))

@@ -22,6 +22,7 @@ namespace ApiReperenceServer.Source.Controllers.Member.Adaptor
     {
         public static ResLogin Login(ReqLogin request)
         {
+            //응답값 초기화
             ResLogin response = new();
 
             using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
@@ -59,6 +60,7 @@ namespace ApiReperenceServer.Source.Controllers.Member.Adaptor
 
         public static ResDefault SetToken(string token, int memberNo)
         {
+            //응답값 초기화
             ResDefault response = new();
 
             using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
@@ -94,6 +96,7 @@ namespace ApiReperenceServer.Source.Controllers.Member.Adaptor
 
         public static ResDefault Logout(ReqMember request)
         {
+            //응답값 초기화
             ResDefault response = new();
 
             using (OracleConnection connection = new(DataBaseConf.ConnectionStrings))
