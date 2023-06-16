@@ -1,4 +1,7 @@
-# .NET CORE 6 Dapper 사용예시 프로젝트입니다.
+# .NET CORE 6 Dapper 사용예시 API 프로젝트입니다.
+Lenguage : .NET CORE 6 ( C# )
+
+DB : Oracle ( Dapper )
 
 ## 프로젝트 구조
 
